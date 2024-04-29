@@ -294,7 +294,7 @@ void display_unassociated(uint8_t disp_idx)
 
 	display_blanking_on(display_dev);
 	cfb_framebuffer_clear(display_dev, true);
-	cfb_print(display_dev, "Hello Nordic!", 0, 0 * font_height);
+	cfb_print(display_dev, "KST2050", 0, 0 * font_height);
 	cfb_print(display_dev, "UNAssociated", 0, 1 * font_height);
 	cfb_print(display_dev, "ESL TAG", 0, 2 * font_height);
 	cfb_print(display_dev, tag_str, 0, 3 * font_height);
@@ -335,7 +335,7 @@ void display_associated(uint8_t disp_idx)
 	snprintk(tag_str, sizeof(tag_str), "ESL TAG 0x%04x", esl_obj->esl_chrc.esl_addr);
 	display_blanking_on(display_dev);
 	cfb_framebuffer_clear(display_dev, true);
-	cfb_print(display_dev, "Hello Nordic!", 0, 0 * font_height);
+	cfb_print(display_dev, "Hello UVConcepts!", 0, 0 * font_height);
 	cfb_print(display_dev, "Associated", 0, 1 * font_height);
 	cfb_print(display_dev, tag_str, 0, 2 * font_height);
 	cfb_print(display_dev, "APAC", 0, 3 * font_height);

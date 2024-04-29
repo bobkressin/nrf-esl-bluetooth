@@ -30,6 +30,12 @@
 #include "esl_client_tag_storage.h"
 #include "esl_dummy_cmd.h"
 
+#include <zephyr/drivers/gpio.h>
+static const struct gpio_dt_spec leds[] = {
+	GPIO_DT_SPEC_GET_OR(DT_ALIAS(led0), gpios, {}),
+	GPIO_DT_SPEC_GET_OR(DT_ALIAS(led1), gpios, {}),
+};
+
 LOG_MODULE_REGISTER(central_esl, CONFIG_CENTRAL_ESL_LOG_LEVEL);
 
 static struct bt_esl_client esl_client;
@@ -331,8 +337,28 @@ static void esl_ap_ping_work_fn(struct k_work *work)
 
 int main(void)
 {
-	int err;
+	int err, ret;
 	uint16_t ctrl_version = 0;
+
+	for (size_t i = 0; i < ARRAY_SIZE(leds); ++i) {
+		if (leds[i].port != NULL && !device_is_ready(leds[i].port)) {
+		}
+
+		ret = gpio_pin_configure_dt(&leds[i], GPIO_OUTPUT);
+		if (ret) {
+		}
+	}
+	int counter = 0;
+	while( counter < 10 )
+	{
+		err = gpio_pin_set_dt(&leds[0], 0);
+		err = gpio_pin_set_dt(&leds[1], 1);
+		k_sleep(K_MSEC(100));
+		err = gpio_pin_set_dt(&leds[0], 1);
+		err = gpio_pin_set_dt(&leds[1], 0);
+		k_sleep(K_MSEC(100));
+		counter++;
+	}
 
 	err = dk_buttons_init(button_handler);
 	if (err) {

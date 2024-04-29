@@ -8,7 +8,7 @@
 
 LOG_MODULE_DECLARE(peripheral_esl);
 
-nt led_init(void)
+int led_init(void)
 {
 	LOG_WRN("No LED device init");
 

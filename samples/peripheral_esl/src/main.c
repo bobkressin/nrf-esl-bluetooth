@@ -229,6 +229,15 @@ static void configure_dk_button(void)
 	}
 }
 
+#define LED1_NODE DT_ALIAS(led1)
+static const struct gpio_dt_spec led_r = GPIO_DT_SPEC_GET(LED1_NODE, gpios);
+
+#define LED2_NODE DT_ALIAS(led2)
+static const struct gpio_dt_spec led_g = GPIO_DT_SPEC_GET(LED2_NODE, gpios);
+
+#define LED3_NODE DT_ALIAS(led3)
+static const struct gpio_dt_spec led_b = GPIO_DT_SPEC_GET(LED3_NODE, gpios);
+
 static int start_execute(void)
 {
 	int err;
@@ -323,6 +332,38 @@ static int start_execute(void)
 #if defined(CONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION)
 	printk("CONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION %s\n", CONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION);
 #endif /* CONFIG_MCUBOOT_IMAGE_VERSION */
+
+	/* KST - Turn off the LEDs */
+	if (!gpio_is_ready_dt(&led_r)) {
+		return 0;
+	}
+
+	if (!gpio_is_ready_dt(&led_g)) {
+		return 0;
+	}
+
+	if (!gpio_is_ready_dt(&led_b)) {
+		return 0;
+	}
+
+	err = gpio_pin_configure_dt(&led_r, GPIO_OUTPUT_ACTIVE);
+	if (err < 0) {
+		return 0;
+	}
+
+	err = gpio_pin_configure_dt(&led_g, GPIO_OUTPUT_ACTIVE);
+	if (err < 0) {
+		return 0;
+	}
+
+	err = gpio_pin_configure_dt(&led_b, GPIO_OUTPUT_ACTIVE);
+	if (err < 0) {
+		return 0;
+	}
+
+	err = gpio_pin_set_dt( &led_r, 1);
+	err = gpio_pin_set_dt( &led_g, 1);
+	err = gpio_pin_set_dt( &led_b, 1);
 
 	for (;;) {
 		k_sleep(K_FOREVER);
